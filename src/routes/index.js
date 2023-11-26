@@ -1,13 +1,21 @@
 const express = require('express')
-const homeRouter = require('./home')
+const authRouter = require('./auth')
+const userRouter = require('./user')
+const adminRouter = require('./admin')
 
 const router = express.Router();
 
 const route = (app) => {
 
+    //auth
+    router.use('api/auth/', authRouter)
 
+    //user
+    router.use('/api/user', userRouter)
 
-    router.use('/', homeRouter)
+    //admin
+    router.use('/api/admin', adminRouter)
+
 }
 
 module.exports = route
