@@ -1,9 +1,9 @@
 const { Sequelize, DataTypes, Model, INTEGER } = require('sequelize');
 const { sequelize } = require('../config/connectDB')
 
-class User extends Model { }
+class Admin extends Model { }
 
-User.init({
+Admin.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -19,8 +19,8 @@ User.init({
     },
 }, {
     sequelize,
-    modelName: 'User',
-    tableName: 'users'
+    modelName: 'Admin',
+    tableName: 'admins'
 });
 
-module.exports = User
+module.exports = Admin

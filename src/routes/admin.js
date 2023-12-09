@@ -3,8 +3,8 @@ const router = express()
 const AdminController = require('../controllers/AdminController')
 
 //admin auth
+router.post('/auth/register', AdminController.register)
 router.post('/auth/login', AdminController.login)
-router.get('/auth/authorize', AdminController.authorize)
 
 //buy request
 router.get('/buy/requests', AdminController.getBuyRequests)
