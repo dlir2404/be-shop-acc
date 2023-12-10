@@ -5,10 +5,10 @@ class CommonController {
     //[get] /api/accounts
     async getAccounts(req, res, next) {
         try {
-            const limit = 3;
-            const offset = req.query._page ? (req.query._page - 1)*limit : 0
+            const limit = 10;
+            const offset = req.query._page ? (req.query._page - 1) * limit : 0
             const accounts = await Account.findAll({
-                attributes: { exclude: ['username', 'password']},
+                attributes: { exclude: ['username', 'password'] },
                 limit: limit,
                 offset: offset,
             })
