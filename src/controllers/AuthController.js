@@ -1,4 +1,5 @@
-const User = require('../models/User')
+const db = require('../models')
+const User = db.User
 const { findByUsername } = require('../services/findUser')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')

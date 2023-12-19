@@ -1,17 +1,14 @@
-const { Sequelize } = require('sequelize');
-
-const sequelize = new Sequelize('shop_acc', 'dlir', 'linhcdabc2404', {
-    host: 'shop-acc.c6ihwuywlfdz.ap-southeast-2.rds.amazonaws.com',
-    dialect: 'mysql'
-});
-
-const testConnection = async () => {
-    try {
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
+module.exports = {
+    HOST: 'shop-acc.c6ihwuywlfdz.ap-southeast-2.rds.amazonaws.com',
+    USER: 'dlir',
+    PASSWORD: 'linhcdabc2404',
+    DB: 'shop_acc',
+    dialect: 'mysql',
+    port: 3306,
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
     }
 }
-
-module.exports = { sequelize, testConnection }

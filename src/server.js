@@ -10,9 +10,6 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-//connectDB
-const { sequelize, testConnection } = require('./config/connectDB')
-testConnection()
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");

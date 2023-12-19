@@ -1,3 +1,5 @@
+const db = require('../models')
+const User = db.User
 
 class UserController {
     //[post] /api/user/buy
