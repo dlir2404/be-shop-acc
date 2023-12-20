@@ -1,5 +1,8 @@
 const db = require('../models')
 const Admin = db.Admin
+const User = db.User
+const Purchase = db.Purchase
+const Sell = db.Sell
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
@@ -68,37 +71,69 @@ class AdminController {
         }
     }
 
-    //[get] /api/admin/buy/requests
-    getBuyRequests(req, res, next) {
-        const admin = {
-            username: 'dlir2404',
-            password: 'linhcdabc2404'
+    //[get] /api/admin/users
+    async getUsers(req, res, next) {
+        try {
+            const count = await User.count({
+                attributes: { exclude: ['password', 'updatedAt'] },
+            })
+            const response = await User.findAll({
+                attributes: { exclude: ['password', 'updatedAt'] },
+            })
+            res.status(200).json({
+                count: count,
+                data: response
+            })
+        } catch (error) {
+            res.status(400).json("Bad request")
         }
+    }
 
-        const newAdmin = Admin.create(admin)
-        Admin.sync({ force: true })
+    //[get] /api/admin/buy/requests
+    async getBuyRequests(req, res, next) {
+        try {
+            const count = await Purchase.count({})
+            const BuyRequests = await Purchase.findAll({})
+            res.status(200).json({
+                count,
+                data: BuyRequests,
+            });
+        } catch (error) {
+            console.log(error)
+            res.status(400).json("Bad request")
+        }
     }
     //[post] /api/admin/buy/accept-request
-    acceptBuyRequest(req, res, next) {
+    async acceptBuyRequest(req, res, next) {
 
     }
     //[post] /api/admin/buy/deny-request
-    denyBuyRequest(req, res, next) {
+    async denyBuyRequest(req, res, next) {
 
     }
 
     //[get] /api/admin/sell/requests
-    getSellRequest(req, res, next) {
-
+    async getSellRequest(req, res, next) {
+        try {
+            const count = await Purchase.count({})
+            const BuyRequests = await Purchase.findAll({})
+            res.status(200).json({
+                count,
+                data: BuyRequests,
+            });
+        } catch (error) {
+            console.log(error)
+            res.status(400).json("Bad request")
+        }
     }
 
     //[post] /api/admin/sell/accept-request
-    acceptSellRequest(req, res, next) {
+    async acceptSellRequest(req, res, next) {
 
     }
 
     //[post] /api/admin/sell/deny-request
-    denySellRequest(req, res, next) {
+    async denySellRequest(req, res, next) {
 
     }
 

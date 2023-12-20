@@ -6,6 +6,9 @@ const AdminController = require('../controllers/AdminController')
 router.post('/auth/register', AdminController.register)
 router.post('/auth/login', AdminController.login)
 
+//users
+router.get('/users', AdminController.getUsers)
+
 //buy request
 router.get('/buy/requests', AdminController.getBuyRequests)
 router.post('/buy/accept-request', AdminController.acceptBuyRequest)
