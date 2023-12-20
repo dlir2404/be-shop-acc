@@ -11,8 +11,8 @@ router.get('/users', AdminController.getUsers)
 
 //buy request
 router.get('/buy/requests', AdminController.getBuyRequests)
-router.post('/buy/accept-request', AdminController.acceptBuyRequest)
-router.post('/buy/deny-request', AdminController.denyBuyRequest)
+router.post('/buy/accept-request/:id', AdminController.acceptBuyRequest)
+router.post('/buy/deny-request/:id', AdminController.denyBuyRequest)
 
 //sell request
 router.get('/sell/requests', AdminController.getSellRequest)

@@ -105,11 +105,31 @@ class AdminController {
     }
     //[post] /api/admin/buy/accept-request
     async acceptBuyRequest(req, res, next) {
-
+        try {
+            const id = req.params.id
+            const buyRequest = await Purchase.findOne({ where: { id: id } })
+            if (!buyRequest) {
+                return res.status(404).json("Yêu cầu không tồn tại.")
+            }
+            await buyRequest.update({ status: 'Đã xác nhận' })
+            res.status(200).json("Xác nhận thành công")
+        } catch (error) {
+            res.status(400).json(error)
+        }
     }
     //[post] /api/admin/buy/deny-request
     async denyBuyRequest(req, res, next) {
-
+        try {
+            const id = req.params.id
+            const buyRequest = await Purchase.findOne({ where: { id: id } })
+            if (!buyRequest) {
+                return res.status(404).json("Yêu cầu không tồn tại.")
+            }
+            await buyRequest.update({ status: 'Đã từ chối' })
+            res.status(200).json("Đã từ chối yêu cầu")
+        } catch (error) {
+            res.status(400).json(error)
+        }
     }
 
     //[get] /api/admin/sell/requests
