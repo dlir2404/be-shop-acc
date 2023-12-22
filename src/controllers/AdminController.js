@@ -2,6 +2,7 @@ const db = require('../models')
 const Admin = db.Admin
 const User = db.User
 const Purchase = db.Purchase
+const Account = db.Account
 const Sell = db.Sell
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
@@ -86,6 +87,25 @@ class AdminController {
             })
         } catch (error) {
             res.status(400).json("Bad request")
+        }
+    }
+
+    async getAccounts(req, res, next) {
+        try {
+            const limit = 10;
+            const offset = req.query._page ? (req.query._page - 1) * limit : 0
+            const count = await Account.count({})
+            const accounts = await Account.findAll({
+                limit: limit,
+                offset: offset,
+            })
+            res.json({
+                count,
+                data: accounts
+            })
+
+        } catch (error) {
+            next(error)
         }
     }
 

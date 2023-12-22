@@ -8,6 +8,8 @@ router.post('/auth/login', AdminController.login)
 
 //users
 router.get('/users', AdminController.getUsers)
+router.get('/accounts', AdminController.getAccounts)
+
 
 //buy request
 router.get('/buy/requests', AdminController.getBuyRequests)
