@@ -5,10 +5,17 @@ const AdminController = require('../controllers/AdminController')
 //admin auth
 router.post('/auth/register', AdminController.register)
 router.post('/auth/login', AdminController.login)
+router.get('/auth/verify', AdminController.verify)
 
 //users
 router.get('/users', AdminController.getUsers)
+router.post('/users/lock/:id', AdminController.lockUser)
+router.post('/users/unlock/:id', AdminController.unlockUser)
+
+//account
 router.get('/accounts', AdminController.getAccounts)
+router.post('/accounts/add-account', AdminController.addAccount)
+router.delete('/accounts/del-account/:id', AdminController.deleteAccount)
 
 
 //buy request

@@ -72,6 +72,38 @@ class AdminController {
         }
     }
 
+    async verify(req, res, next) {
+        try {
+            let userRes = null
+            const token = req.header('Authorization')?.split(' ')[1]
+            console.log(token)
+            if (!token) {
+                return res.status(401).json({
+                    errorCode: 1,
+                    message: 'Unauthentication'
+                })
+            }
+            jwt.verify(token, process.env.SECRET_KEY_TOKEN, (err, user) => {
+                if (err) return res.status(403).json({
+                    errorCode: 5,
+                    message: 'Có lỗi xảy ra, hoặc phiên đăng nhập đã hết hạn'
+                })
+                console.log('>>> check: ', user)
+                userRes = user
+            })
+            res.status(200).json({
+                errorCode: 0,
+                message: 'Xác minh thành công'
+            })
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({
+                errorCode: 2,
+                message: 'Bad request'
+            })
+        }
+    }
+
     //[get] /api/admin/users
     async getUsers(req, res, next) {
         try {
@@ -86,10 +118,34 @@ class AdminController {
                 data: response
             })
         } catch (error) {
+            console.log(error)
             res.status(400).json("Bad request")
         }
     }
 
+    //[post] /api/admin/users/lock/:id
+    async lockUser(req, res, next) {
+        try {
+            console.log('>>> check id: ', req.params?.id)
+            res.status(200).json('Khoá tài khoản thành công')
+        } catch (error) {
+            console.log(error)
+            res.status(400).json("Bad request")
+        }
+    }
+
+    //[post] /api/admin/users/unlock/:id
+    async unlockUser(req, res, next) {
+        try {
+            console.log('>>> check id: ', req.params?.id)
+            res.status(200).json('Mở khoá tài khoản thành công')
+        } catch (error) {
+            console.log(error)
+            res.status(400).json("Bad request")
+        }
+    }
+
+    //[get] /api/admin/accounts
     async getAccounts(req, res, next) {
         try {
             const limit = 10;
@@ -109,6 +165,26 @@ class AdminController {
         }
     }
 
+    //[post] /api/admin/accounts/add-account
+    async addAccount(req, res, next) {
+        try {
+
+        } catch (error) {
+            console.log(error)
+            res.status(400).json("Bad request")
+        }
+    }
+
+    //[delete] /api/admin/accounts/del-account/:id
+    async deleteAccount(req, res, next) {
+        try {
+            console.log(req.params.id)
+        } catch (error) {
+            console.log(error)
+            res.status(400).json("Bad request")
+        }
+    }
+
     //[get] /api/admin/buy/requests
     async getBuyRequests(req, res, next) {
         try {
@@ -123,7 +199,7 @@ class AdminController {
             res.status(400).json("Bad request")
         }
     }
-    //[post] /api/admin/buy/accept-request
+    //[post] /api/admin/buy/accept-request/:id
     async acceptBuyRequest(req, res, next) {
         try {
             const id = req.params.id
@@ -137,7 +213,7 @@ class AdminController {
             res.status(400).json(error)
         }
     }
-    //[post] /api/admin/buy/deny-request
+    //[post] /api/admin/buy/deny-request/:id
     async denyBuyRequest(req, res, next) {
         try {
             const id = req.params.id
