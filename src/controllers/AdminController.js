@@ -76,7 +76,6 @@ class AdminController {
         try {
             let userRes = null
             const token = req.header('Authorization')?.split(' ')[1]
-            console.log(token)
             if (!token) {
                 return res.status(401).json({
                     errorCode: 1,
@@ -88,7 +87,6 @@ class AdminController {
                     errorCode: 5,
                     message: 'Có lỗi xảy ra, hoặc phiên đăng nhập đã hết hạn'
                 })
-                console.log('>>> check: ', user)
                 userRes = user
             })
             res.status(200).json({
@@ -168,7 +166,8 @@ class AdminController {
     //[post] /api/admin/accounts/add-account
     async addAccount(req, res, next) {
         try {
-
+            console.log(req.body)
+            res.json('ok')
         } catch (error) {
             console.log(error)
             res.status(400).json("Bad request")
