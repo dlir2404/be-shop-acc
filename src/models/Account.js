@@ -37,7 +37,12 @@ module.exports = (sequelize, DataTypes) => {
         image_url: {
             type: DataTypes.STRING,
             allowNull: false
-        }
+        },
+        isPending: {
+            type: DataTypes.TINYINT,
+            allowNull: false,
+            defaultValue: 0,
+        },
     }, {
         timestamps: false
     })

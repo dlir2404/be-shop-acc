@@ -25,7 +25,7 @@ router.post('/buy/deny-request/:id', AdminController.denyBuyRequest)
 
 //sell request
 router.get('/sell/requests', AdminController.getSellRequest)
-router.post('/sell/accept-request', AdminController.acceptSellRequest)
-router.post('/sell/deny-request', AdminController.denySellRequest)
+router.post('/sell/accept-request/:id', AdminController.acceptSellRequest)
+router.post('/sell/deny-request/:id', AdminController.denySellRequest)
 
 module.exports = router

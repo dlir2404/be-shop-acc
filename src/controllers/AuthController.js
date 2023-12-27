@@ -97,7 +97,6 @@ class AuthController {
                 userRes = user
             })
 
-            console.log('>>> check: ', userRes)
             res.status(200).json({
                 errorCode: 0,
                 message: 'Xác minh thành công',

@@ -2,6 +2,7 @@ const db = require('../models')
 const User = db.User
 const Purchase = db.Purchase
 const Account = db.Account
+const Sell = db.Sell
 const { Op } = require("sequelize");
 
 class UserController {
@@ -17,60 +18,105 @@ class UserController {
         res.status(200).json(newPurchase)
     }
 
-    //[post] /api/user/sell
-    sell(req, res, next) {
-
-    }
-
     //[get] /api/user/purchased
     async getPurchased(req, res, next) {
-        const userPurchased = await User.findOne({ where: { username: req.user.username } })
-        const count = await Purchase.count({
-            where: { userId: userPurchased.id },
-        })
-        const purchasedsaccept = await Purchase.findAll({
-            where: {
-                userId: userPurchased.id,
-                status: 'Đã xác nhận'
-            },
-            include: [{
-                model: Account,
-                attributes: ['username', 'password'],
-            }],
-        })
+        try {
+            const userPurchased = await User.findOne({ where: { username: req.user.username } })
+            const count = await Purchase.count({
+                where: { userId: userPurchased.id },
+            })
+            const purchasedsaccept = await Purchase.findAll({
+                where: {
+                    userId: userPurchased.id,
+                    status: 'Đã xác nhận'
+                },
+                include: [{
+                    model: Account,
+                    attributes: ['username', 'password'],
+                }],
+            })
 
-        const purchasedsrest = await Purchase.findAll({
-            where: {
-                userId: userPurchased.id,
-                [Op.or]: [
-                    { status: 'Chờ xác nhận' },
-                    { status: 'Đã từ chối' }
-                ]
-            },
-        })
+            const purchasedsrest = await Purchase.findAll({
+                where: {
+                    userId: userPurchased.id,
+                    [Op.or]: [
+                        { status: 'Chờ xác nhận' },
+                        { status: 'Đã từ chối' }
+                    ]
+                },
+            })
 
-        const allPurchase = [...purchasedsaccept, ...purchasedsrest].sort((a, b) => b.id - a.id)
+            const allPurchase = [...purchasedsaccept, ...purchasedsrest].sort((a, b) => b.id - a.id)
 
 
-        return res.status(200).json({
-            count,
-            data: allPurchase,
-        })
+            return res.status(200).json({
+                count,
+                data: allPurchase,
+            })
+        } catch (error) {
+            res.status(500).json({
+                error: error,
+                message: "server internal errror"
+            })
+        }
     }
 
-    async getPurchasedAccount(req, res, next) {
-        const userPurchased = await User.findOne({ where: { username: req.user.username } })
-        const purchaseds = await Purchase.findAll({
-            where: { userId: userPurchased.id, status: "Đã chấp nhận" },
-            include: [{
-                model: Account,
-                attributes: ['username', 'password'],
-            }],
-            order: [['id', 'DESC']],
-        })
-        return res.status(200).json(purchaseds)
+    //[post] /api/user/sell
+    async sell(req, res, next) {
+        try {
+            const userSold = await User.findOne({ where: { username: req.user.username } })
+            const newSell = await Sell.create(req.body)
+            userSold.addSell(newSell)
+            res.status(200).json("true")
+        } catch (error) {
+            console.log(error)
+            res.status(500).json("server internal error")
+        }
+    }
+    //[get] /api/user/sold
+    async getSold(req, res, next) {
+        try {
+            const userSold = await User.findOne({ where: { username: req.user.username } })
+            const count = await Sell.count({
+                where: { userId: userSold.id },
+            })
+            const solds = await Sell.findAll({
+                where: {
+                    userId: userSold.id,
+                },
+                order: [['id', 'DESC']]
+            })
+
+            return res.status(200).json({
+                count,
+                data: solds,
+            })
+        } catch (error) {
+            res.status(500).json({
+                error: error,
+                message: "server internal errror"
+            })
+        }
     }
 
+    async sendPayInfo(req, res, next) {
+        try {
+            const sold = await Sell.findOne({ where: { id: req.body.id } })
+            await sold.update({
+                username: req.body.username,
+                password: req.body.password,
+                payUrl: req.body.payUrl,
+                status: 'Đã gửi thông tin thanh toán'
+            })
+            res.status(200).json("true")
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({
+                error: error,
+                message: "server internal errror"
+            })
+        }
+    }
 }
 
 module.exports = new UserController()

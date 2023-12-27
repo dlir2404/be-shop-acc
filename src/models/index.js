@@ -49,5 +49,7 @@ db.User.hasMany(db.Purchase, { foreignKey: 'userId' })
 db.Purchase.belongsTo(db.User)
 db.Account.hasOne(db.Purchase, { foreignKey: 'accountId' })
 db.Purchase.belongsTo(db.Account)
+db.User.hasMany(db.Sell, { foreignKey: 'userId' })
+db.Sell.belongsTo(db.User)
 
 module.exports = db

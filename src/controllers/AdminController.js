@@ -251,8 +251,8 @@ class AdminController {
     //[get] /api/admin/sell/requests
     async getSellRequest(req, res, next) {
         try {
-            const count = await Purchase.count({})
-            const BuyRequests = await Purchase.findAll({})
+            const count = await Sell.count({})
+            const BuyRequests = await Sell.findAll({})
             res.status(200).json({
                 count,
                 data: BuyRequests,
@@ -265,12 +265,32 @@ class AdminController {
 
     //[post] /api/admin/sell/accept-request
     async acceptSellRequest(req, res, next) {
-
+        try {
+            const id = req.params.id
+            const sellRequest = await Sell.findOne({ where: { id: id } })
+            if (!sellRequest) {
+                return res.status(404).json("Yêu cầu không tồn tại.")
+            }
+            await sellRequest.update({ status: 'Đã xác nhận' })
+            res.status(200).json("Xác nhận thành công")
+        } catch (error) {
+            res.status(500).json("server internal error")
+        }
     }
 
     //[post] /api/admin/sell/deny-request
     async denySellRequest(req, res, next) {
-
+        try {
+            const id = req.params.id
+            const sellRequest = await Sell.findOne({ where: { id: id } })
+            if (!sellRequest) {
+                return res.status(404).json("Yêu cầu không tồn tại.")
+            }
+            await sellRequest.update({ status: 'Đã từ chối' })
+            res.status(200).json("Đã từ chối yêu cầu")
+        } catch (error) {
+            res.status(500).json("server internal error")
+        }
     }
 
 }
