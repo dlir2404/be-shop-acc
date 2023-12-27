@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         status: {
             type: DataTypes.STRING,
+            defaultValue: 'Chờ xác nhận'
         },
         billUrl: {
             type: DataTypes.STRING,

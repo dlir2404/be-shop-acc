@@ -1,5 +1,6 @@
 const dbConfig = require('../config/connectDB')
 const { Sequelize, DataTypes } = require('sequelize');
+const Purchase = require('./Purchase.js');
 
 const sequelize = new Sequelize(
     dbConfig.DB,
@@ -43,5 +44,10 @@ db.Admin = require('./Admin.js')(sequelize, DataTypes)
 db.Account = require('./Account.js')(sequelize, DataTypes)
 db.Purchase = require('./Purchase.js')(sequelize, DataTypes)
 db.Sell = require('./Sell.js')(sequelize, DataTypes)
+
+db.User.hasMany(db.Purchase, { foreignKey: 'userId' })
+db.Purchase.belongsTo(db.User)
+db.Account.hasOne(db.Purchase, { foreignKey: 'accountId' })
+db.Purchase.belongsTo(db.Account)
 
 module.exports = db

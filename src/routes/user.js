@@ -4,7 +4,7 @@ const UserController = require('../controllers/UserController')
 const authenticateToken = require('../middlewares/authenticate')
 
 router.post('/buy', authenticateToken, UserController.buy)
-router.post('/sell', UserController.sell)
-router.get('/buy-histories', UserController.getBuyHistories)
+router.post('/sell', authenticateToken, UserController.sell)
+router.get('/purchased', authenticateToken, UserController.getPurchased)
 
 module.exports = router

@@ -124,7 +124,11 @@ class AdminController {
     //[post] /api/admin/users/lock/:id
     async lockUser(req, res, next) {
         try {
-            console.log('>>> check id: ', req.params?.id)
+            const userToLock = await User.findOne({ where: { id: req.params.id } })
+            if (!userToLock) {
+                return res.status(404).json("User không tồn tại.")
+            }
+            await userToLock.update({ isLocked: 1 })
             res.status(200).json('Khoá tài khoản thành công')
         } catch (error) {
             console.log(error)
@@ -135,7 +139,11 @@ class AdminController {
     //[post] /api/admin/users/unlock/:id
     async unlockUser(req, res, next) {
         try {
-            console.log('>>> check id: ', req.params?.id)
+            const userToLock = await User.findOne({ where: { id: req.params.id } })
+            if (!userToLock) {
+                return res.status(404).json("User không tồn tại.")
+            }
+            await userToLock.update({ isLocked: 0 })
             res.status(200).json('Mở khoá tài khoản thành công')
         } catch (error) {
             console.log(error)
@@ -146,12 +154,12 @@ class AdminController {
     //[get] /api/admin/accounts
     async getAccounts(req, res, next) {
         try {
-            const limit = 10;
-            const offset = req.query._page ? (req.query._page - 1) * limit : 0
+            // const limit = 10;
+            // const offset = req.query._page ? (req.query._page - 1) * limit : 0
             const count = await Account.count({})
             const accounts = await Account.findAll({
-                limit: limit,
-                offset: offset,
+                // limit: limit,
+                // offset: offset,
             })
             res.json({
                 count,
@@ -166,8 +174,8 @@ class AdminController {
     //[post] /api/admin/accounts/add-account
     async addAccount(req, res, next) {
         try {
-            console.log(req.body)
-            res.json('ok')
+            const newAccount = await Account.create(req.body)
+            res.status(200).json("true")
         } catch (error) {
             console.log(error)
             res.status(400).json("Bad request")
@@ -177,7 +185,20 @@ class AdminController {
     //[delete] /api/admin/accounts/del-account/:id
     async deleteAccount(req, res, next) {
         try {
-            console.log(req.params.id)
+            const id = req.params.id
+            if (!id) {
+                return res.status(400).json("Bad request")
+            }
+            const rowsDeleted = await Account.destroy({ where: { id: id } })
+            console.log(rowsDeleted)
+            if (rowsDeleted > 0) {
+                return res.status(200).json("true")
+            } else {
+                return res.status(500).json({
+                    errorCode: 10,
+                    message: "Xóa không thành công"
+                })
+            }
         } catch (error) {
             console.log(error)
             res.status(400).json("Bad request")

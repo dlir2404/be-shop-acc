@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         is_full_gems: {
             type: DataTypes.TINYINT,
-            allowNull: true
+            allowNull: false,
+            defaultValue: 0,
         },
         price: {
             type: DataTypes.INTEGER,

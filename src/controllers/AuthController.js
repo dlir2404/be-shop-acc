@@ -78,6 +78,40 @@ class AuthController {
         }
     }
 
+    //[post] /api/auth/me
+    async verify(req, res, next) {
+        try {
+            let userRes = null
+            const token = req.header('Authorization')?.split(' ')[1]
+            if (!token) {
+                return res.status(401).json({
+                    errorCode: 1,
+                    message: 'Unauthentication'
+                })
+            }
+            jwt.verify(token, process.env.SECRET_KEY_TOKEN, (err, user) => {
+                if (err) return res.status(403).json({
+                    errorCode: 5,
+                    message: 'Có lỗi xảy ra, hoặc phiên đăng nhập đã hết hạn'
+                })
+                userRes = user
+            })
+
+            console.log('>>> check: ', userRes)
+            res.status(200).json({
+                errorCode: 0,
+                message: 'Xác minh thành công',
+                user: userRes
+            })
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({
+                errorCode: 2,
+                message: 'Bad request'
+            })
+        }
+    }
+
     //[post] /api/auth/logout
     async logout(req, res, next) {
 

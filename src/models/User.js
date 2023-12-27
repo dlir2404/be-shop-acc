@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        isLocked: {
+            type: DataTypes.TINYINT,
+            allowNull: false,
+            defaultValue: 0,
+        }
     })
     return User
 }
