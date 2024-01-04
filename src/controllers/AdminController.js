@@ -295,6 +295,22 @@ class AdminController {
         }
     }
 
+    //[post] /api/admin/sell/confirm-pay/:id
+    async confirmPay(req, res, next) {
+        try {
+            const sellRequest = await Sell.findOne({ where: { id: req.params.id } })
+            await sellRequest.update({
+                password: req.body.password,
+                billUrl: req.body.image_url,
+                status: 'Giao dịch hoàn tất',
+            })
+            res.status(200).json('true')
+        } catch (error) {
+            console.log(error)
+            res.status(500).json('Server Internal Error')
+        }
+    }
+
 }
 
 module.exports = new AdminController
