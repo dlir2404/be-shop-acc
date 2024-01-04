@@ -301,8 +301,18 @@ class AdminController {
             const sellRequest = await Sell.findOne({ where: { id: req.params.id } })
             await sellRequest.update({
                 password: req.body.password,
-                billUrl: req.body.image_url,
+                billUrl: req.body.billUrl,
                 status: 'Giao dịch hoàn tất',
+            })
+            const newAccount = await Account.create({
+                username: sellRequest.username,
+                password: req.body.password,
+                heroes_num: sellRequest.heroes_num,
+                costumes_num: sellRequest.costumes_num,
+                rank: sellRequest.rank,
+                is_full_gems: sellRequest.is_full_gems,
+                price: sellRequest.price,
+                image_url: sellRequest.image_url,
             })
             res.status(200).json('true')
         } catch (error) {
