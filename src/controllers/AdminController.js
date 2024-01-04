@@ -242,6 +242,8 @@ class AdminController {
                 return res.status(404).json("Yêu cầu không tồn tại.")
             }
             await buyRequest.update({ status: 'Đã từ chối' })
+            const account = await buyRequest.getAccount()
+            await account.update({ isPending: 0 })
             res.status(200).json("Đã từ chối yêu cầu")
         } catch (error) {
             res.status(400).json(error)

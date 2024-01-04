@@ -1,7 +1,7 @@
 module.exports = {
-    HOST: 'shop-acc.c6ihwuywlfdz.ap-southeast-2.rds.amazonaws.com',
-    USER: 'dlir',
-    PASSWORD: 'linhcdabc2404',
+    HOST: 'localhost',
+    USER: 'root',
+    PASSWORD: '123456',
     DB: 'shop_acc',
     dialect: 'mysql',
     port: 3306,

@@ -8,14 +8,25 @@ const { Op } = require("sequelize");
 class UserController {
     //[post] /api/user/buy
     async buy(req, res, next) {
-        const userPurchased = await User.findOne({ where: { username: req.user.username } })
-        const { accountId, ...values } = req.body
-        const accountPurchased = await Account.findOne({ where: { id: accountId } })
+        try {
+            const userPurchased = await User.findOne({ where: { username: req.user.username } })
+            const { accountId, ...values } = req.body
+            const accountPurchased = await Account.findOne({ where: { id: accountId } })
 
-        const newPurchase = await Purchase.create(values)
-        userPurchased.addPurchase(newPurchase)
-        accountPurchased.setPurchase(newPurchase)
-        res.status(200).json(newPurchase)
+            if (!accountPurchased) {
+                res.status(404).json('Account not found')
+            } else {
+                await accountPurchased.update({ isPending: 1 })
+
+                const newPurchase = await Purchase.create(values)
+                userPurchased.addPurchase(newPurchase)
+                accountPurchased.setPurchase(newPurchase)
+                res.status(200).json(newPurchase)
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json('Server Internal Error')
+        }
     }
 
     //[get] /api/user/purchased
